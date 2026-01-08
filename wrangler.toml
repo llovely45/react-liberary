@@ -1,0 +1,8 @@
+name = "react-liberary"
+compatibility_date = "2026-01-09"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "liberart_db"
+database_id = "645325f4-b9e7-4449-93c3-31cebe25937a"
+
