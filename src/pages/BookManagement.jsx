@@ -71,11 +71,11 @@ const BookManagement = ({ isEdit }) => {
     return (
         <div className="max-w-2xl mx-auto">
             <button onClick={() => navigate('/books')} className="btn btn-secondary mb-6 text-sm">
-                <ArrowLeft size={16} /> Back to Catalog
+                <ArrowLeft size={16} /> 返回目录
             </button>
 
             <div className="card">
-                <h1 className="text-2xl font-bold text-primary mb-6">{isEdit ? 'Edit Book' : 'Add New Book'}</h1>
+                <h1 className="text-2xl font-bold text-primary mb-6">{isEdit ? '编辑图书' : '添加新书'}</h1>
 
                 {error && <div className="p-3 mb-4 bg-red-100 text-red-700 rounded-md text-sm">{error}</div>}
 
@@ -86,46 +86,46 @@ const BookManagement = ({ isEdit }) => {
                             <input name="isbn" value={formData.isbn} onChange={handleChange} className="input" required disabled={isEdit} />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium mb-1">Title</label>
+                            <label className="block text-sm font-medium mb-1">书名</label>
                             <input name="title" value={formData.title} onChange={handleChange} className="input" required />
                         </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm font-medium mb-1">Author</label>
+                            <label className="block text-sm font-medium mb-1">作者</label>
                             <input name="author" value={formData.author} onChange={handleChange} className="input" required />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium mb-1">Publisher</label>
+                            <label className="block text-sm font-medium mb-1">出版社</label>
                             <input name="publisher" value={formData.publisher} onChange={handleChange} className="input" />
                         </div>
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-1">Publication Date</label>
+                        <label className="block text-sm font-medium mb-1">出版日期</label>
                         <input type="date" name="publication_date" value={formData.publication_date} onChange={handleChange} className="input" />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium mb-1">Description</label>
+                        <label className="block text-sm font-medium mb-1">简介</label>
                         <textarea name="description" value={formData.description} onChange={handleChange} className="input h-32" />
                     </div>
 
                     {isEdit && (
                         <div>
-                            <label className="block text-sm font-medium mb-1">Status</label>
+                            <label className="block text-sm font-medium mb-1">状态</label>
                             <select name="status" value={formData.status} onChange={handleChange} className="input">
-                                <option value="available">Available</option>
-                                <option value="borrowed">Borrowed</option>
-                                <option value="lost">Lost</option>
+                                <option value="available">可借阅</option>
+                                <option value="borrowed">已借出</option>
+                                <option value="lost">遗失</option>
                             </select>
                         </div>
                     )}
 
                     <div className="pt-4">
                         <button type="submit" className="btn btn-primary w-full justify-center" disabled={loading}>
-                            <Save size={18} /> {loading ? 'Saving...' : 'Save Book'}
+                            <Save size={18} /> {loading ? '保存中...' : '保存'}
                         </button>
                     </div>
                 </form>

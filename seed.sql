@@ -1,7 +1,6 @@
 -- Seed data
 
 INSERT INTO Users (username, password, role) VALUES 
-('admin', 'admin123', 'admin'),
 ('staff', 'staff123', 'staff'),
 ('reader', 'reader123', 'reader');
 

@@ -22,15 +22,15 @@ const Layout = () => {
                     </Link>
 
                     <div className="flex-center gap-6">
-                        <Link to="/" className={isActive('/')}>Dashboard</Link>
-                        <Link to="/books" className={isActive('/books')}>Books</Link>
+                        <Link to="/" className={isActive('/')}>仪表盘</Link>
+                        <Link to="/books" className={isActive('/books')}>图书列表</Link>
 
                         {(user.role === 'admin' || user.role === 'staff') && (
-                            <Link to="/books/new" className={isActive('/books/new')}>Add Book</Link>
+                            <Link to="/books/new" className={isActive('/books/new')}>添加图书</Link>
                         )}
 
                         {user.role === 'admin' && (
-                            <Link to="/users" className={isActive('/users')}>Users</Link>
+                            <Link to="/users" className={isActive('/users')}>用户管理</Link>
                         )}
 
                         <div className="flex-center gap-4 ml-6 pl-6 border-l border-slate-700">
@@ -38,7 +38,7 @@ const Layout = () => {
                                 <User size={16} />
                                 <span>{user.username} ({user.role})</span>
                             </div>
-                            <button onClick={logout} className="text-slate-300 hover:text-accent transition-colors" title="Logout">
+                            <button onClick={logout} className="text-slate-300 hover:text-accent transition-colors" title="退出登录">
                                 <LogOut size={20} />
                             </button>
                         </div>
@@ -51,7 +51,7 @@ const Layout = () => {
             </main>
 
             <footer className="py-6 text-center text-muted text-sm border-t border-slate-200">
-                &copy; {new Date().getFullYear()} Liberary Management System
+                &copy; {new Date().getFullYear()} Liberary 图书管理系统
             </footer>
         </div>
     );

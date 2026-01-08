@@ -34,9 +34,9 @@ const Login = () => {
                     <div className="w-12 h-12 bg-primary rounded-full flex-center text-accent mb-4">
                         <BookOpen size={24} />
                     </div>
-                    <h1 className="text-2xl font-bold text-primary">{isLogin ? 'Welcome Back' : 'Join Liberary'}</h1>
+                    <h1 className="text-2xl font-bold text-primary">{isLogin ? '欢迎回来' : '加入 Liberary'}</h1>
                     <p className="text-muted text-sm mt-2">
-                        {isLogin ? 'Enter your credentials to access the library' : 'Create a new reader account'}
+                        {isLogin ? '输入您的凭证以访问图书馆' : '创建一个新的读者账号'}
                     </p>
                 </div>
 
@@ -48,7 +48,7 @@ const Login = () => {
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-main mb-1">Username</label>
+                        <label className="block text-sm font-medium text-main mb-1">用户名</label>
                         <input
                             type="text"
                             className="input"
@@ -58,7 +58,7 @@ const Login = () => {
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-main mb-1">Password</label>
+                        <label className="block text-sm font-medium text-main mb-1">密码</label>
                         <input
                             type="password"
                             className="input"
@@ -68,17 +68,17 @@ const Login = () => {
                         />
                     </div>
                     <button type="submit" className="w-full btn btn-primary justify-center shadow-lg shadow-blue-900/20">
-                        {isLogin ? 'Sign In' : 'Create Account'}
+                        {isLogin ? '登录' : '创建账号'}
                     </button>
                 </form>
 
                 <div className="mt-6 text-center text-sm">
-                    <span className="text-muted">{isLogin ? "Don't have an account? " : "Already have an account? "}</span>
+                    <span className="text-muted">{isLogin ? "还没有账号？ " : "已有账号？ "}</span>
                     <button
                         onClick={() => setIsLogin(!isLogin)}
                         className="text-primary font-semibold hover:text-accent transition-colors"
                     >
-                        {isLogin ? 'Sign up' : 'Log in'}
+                        {isLogin ? '注册' : '登录'}
                     </button>
                 </div>
             </div>

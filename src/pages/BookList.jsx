@@ -29,7 +29,7 @@ const BookList = () => {
     }, [query]); // Simple debounce could be added, but relying on manual enter or quick keypress is fine for MVP
 
     const handleBorrow = async (bookId) => {
-        if (!confirm('Borrow this book?')) return;
+        if (!confirm('确认借阅这本书吗？')) return;
         try {
             const res = await fetch('/api/borrow', {
                 method: 'POST',
@@ -52,7 +52,7 @@ const BookList = () => {
     };
 
     const handleReturn = async (bookId) => {
-        if (!confirm('Process return for this book?')) return;
+        if (!confirm('确认归还这本书吗？')) return;
         try {
             const res = await fetch('/api/return', {
                 method: 'POST',
@@ -75,7 +75,7 @@ const BookList = () => {
     };
 
     const handleDelete = async (bookId) => {
-        if (!confirm('Are you sure you want to delete this book?')) return;
+        if (!confirm('确定要删除这本书吗？')) return;
         try {
             const res = await fetch(`/api/books/${bookId}`, {
                 method: 'DELETE',
@@ -84,7 +84,7 @@ const BookList = () => {
                 }
             });
             if (res.ok) fetchBooks();
-            else alert('Failed to delete');
+            else alert('删除失败');
         } catch (e) {
             console.error(e);
         }
@@ -93,10 +93,10 @@ const BookList = () => {
     return (
         <div>
             <div className="flex-between mb-6">
-                <h1 className="text-3xl font-bold text-primary">Library Catalog</h1>
+                <h1 className="text-3xl font-bold text-primary">图书目录</h1>
                 {(user.role === 'admin' || user.role === 'staff') && (
                     <Link to="/books/new" className="btn btn-primary">
-                        <Plus size={18} /> Add Book
+                        <Plus size={18} /> 添加图书
                     </Link>
                 )}
             </div>
@@ -105,7 +105,7 @@ const BookList = () => {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted" size={18} />
                 <input
                     type="text"
-                    placeholder="Search by title, author, or ISBN..."
+                    placeholder="按书名、作者或 ISBN 搜索..."
                     className="input pl-10"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
@@ -113,7 +113,7 @@ const BookList = () => {
             </div>
 
             {loading ? (
-                <div className="text-center py-10 text-muted">Loading books...</div>
+                <div className="text-center py-10 text-muted">正在加载图书...</div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {books.map(book => (
@@ -130,12 +130,12 @@ const BookList = () => {
                             <div className="flex items-center gap-2 mt-auto pt-4 border-t border-gray-100">
                                 {book.status === 'available' && (
                                     <button onClick={() => handleBorrow(book.id)} className="btn btn-primary text-xs py-1 px-3 flex-grow justify-center">
-                                        Borrow
+                                        借阅
                                     </button>
                                 )}
                                 {book.status === 'borrowed' && (user.role === 'admin' || user.role === 'staff') && (
                                     <button onClick={() => handleReturn(book.id)} className="btn btn-secondary text-xs py-1 px-3 flex-grow justify-center">
-                                        Return
+                                        归还
                                     </button>
                                 )}
 
@@ -154,7 +154,7 @@ const BookList = () => {
                     ))}
                     {books.length === 0 && (
                         <div className="col-span-full text-center py-10 text-muted">
-                            No books found matching your search.
+                            未找到匹配的图书。
                         </div>
                     )}
                 </div>

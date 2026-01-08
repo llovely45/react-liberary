@@ -36,10 +36,10 @@ const UserManagement = () => {
                 body: JSON.stringify({ role: newRole })
             });
             if (res.ok) {
-                alert('Role updated');
+                alert('角色已更新');
                 fetchUsers();
             } else {
-                alert('Failed to update role');
+                alert('更新角色失败');
             }
         } catch (e) {
             alert(e.message);
@@ -48,16 +48,16 @@ const UserManagement = () => {
 
     return (
         <div>
-            <h1 className="text-3xl font-bold text-primary mb-6">User Management</h1>
+            <h1 className="text-3xl font-bold text-primary mb-6">用户管理</h1>
 
             <div className="card overflow-hidden p-0">
                 <table className="w-full text-left border-collapse">
                     <thead className="bg-slate-50 border-b border-border">
                         <tr>
                             <th className="p-4 text-sm font-semibold text-muted">ID</th>
-                            <th className="p-4 text-sm font-semibold text-muted">Username</th>
-                            <th className="p-4 text-sm font-semibold text-muted">Role</th>
-                            <th className="p-4 text-sm font-semibold text-muted">Created At</th>
+                            <th className="p-4 text-sm font-semibold text-muted">用户名</th>
+                            <th className="p-4 text-sm font-semibold text-muted">角色</th>
+                            <th className="p-4 text-sm font-semibold text-muted">创建时间</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-border">
