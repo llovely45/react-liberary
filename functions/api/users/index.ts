@@ -32,21 +32,21 @@ export async function onRequestPost(context) {
             return errorResponse('Missing fields', 400);
         }
 
-        // Permission Check
+        // 权限检查
         if (user.role === 'admin') {
             if (role === 'admin') return errorResponse('Cannot create another admin via API', 403);
-            // Admin can create staff and reader
+            // 管理员可以创建工作人员（staff）和读者（reader）
         } else if (user.role === 'staff') {
             if (role !== 'reader') return errorResponse('Staff can only create readers', 403);
         } else {
             return errorResponse('Unauthorized', 403);
         }
 
-        // Check existing
+        // 检查用户是否已存在
         const existing = await env.DB.prepare('SELECT id FROM Users WHERE username = ?').bind(username).first();
         if (existing) return errorResponse('Username already exists', 409);
 
-        // Hash and Insert
+        // 哈希加密并插入数据库
         const hashedPassword = await hashPassword(password);
         await env.DB.prepare('INSERT INTO Users (username, password, role) VALUES (?, ?, ?)')
             .bind(username, hashedPassword, role)

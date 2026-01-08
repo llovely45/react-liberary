@@ -1,7 +1,7 @@
 
 import { jwtVerify } from 'jose';
 
-// Simple PBKDF2 implementation for Cloudflare Workers
+// 适用于 Cloudflare Workers 的简单 PBKDF2 实现
 async function pbkdf2(password, salt) {
     const enc = new TextEncoder();
     const keyMaterial = await crypto.subtle.importKey(
@@ -28,7 +28,7 @@ async function pbkdf2(password, salt) {
 }
 
 export async function hashPassword(password) {
-    const salt = "global-salt-v1"; // In prod, generate random salt per user
+    const salt = "global-salt-v1"; // 在生产环境中，应为每个用户生成随机盐值
     return await pbkdf2(password, salt);
 }
 
@@ -48,7 +48,7 @@ export async function verifyToken(request, env) {
     try {
         const secret = new TextEncoder().encode(env.JWT_SECRET || 'secret-salt-dev');
         const { payload } = await jwtVerify(token, secret);
-        return payload; // { sub, role, username, ... }
+        return payload; // { sub, role, username, ... } - 负载信息，包括使用者、角色、用户名等
     } catch (e) {
         return null;
     }

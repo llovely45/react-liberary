@@ -25,16 +25,16 @@ export async function onRequestPut(context) {
 
     try {
         const data = await request.json();
-        // Dynamic update query construction could be safer, but for MVP we might just update explicitly or check fields.
-        // Let's simplified update: only allow updating main metadata, not ID or CreatedAt.
-        const { title, author, publisher, description, status } = data; // destructure allowed fields
+        // 这种动态构建更新查询的方式可能会更安全，但对于 MVP 版本，我们可以直接进行更新或检查字段。
+        // 让我们简化更新逻辑：仅允许更新主要的元数据，不允许修改 ID 或 CreatedAt。
+        const { title, author, publisher, description, status } = data; // 解构允许修改的字段
 
-        // We construct a query dynamically based on what's provided
-        // Actually, SQL simple update:
+        // 我们根据提供的数据动态构建查询语句
+        // 实际上，使用简单的 SQL 更新语句：
         // UPDATE Books SET title=?, author=?, ... WHERE id=?
-        // But we need to handle partial updates or expect full object. Let's expect partials.
+        // 但我们需要处理部分更新，或者期望传入完整的对象。这里我们支持部分更新。
 
-        // Simple approach: fetch existing, merge, update. (Two Query)
+        // 简单的方法：先获取现有数据，合并后再更新。（需要两次查询）
         const existing = await env.DB.prepare('SELECT * FROM Books WHERE id = ?').bind(id).first();
         if (!existing) return errorResponse('Book not found', 404);
 

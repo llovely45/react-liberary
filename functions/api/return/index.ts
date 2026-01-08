@@ -12,20 +12,20 @@ export async function onRequestPost(context) {
     try {
         const { bookId } = await request.json();
 
-        // Check if book is borrowed
+        // 检查书籍是否已被借出
         const book = await env.DB.prepare('SELECT status FROM Books WHERE id = ?').bind(bookId).first();
         if (!book) return errorResponse('Book not found', 404);
-        if (book.status !== 'borrowed') return errorResponse('Book is not borrowed', 400); // Or just idempotent success?
+        if (book.status !== 'borrowed') return errorResponse('Book is not borrowed', 400); // 或者保持幂等性返回成功？
 
-        // Find active borrow record
-        // We need the latest record where return_date is NULL
+        // 查找活跃的借阅记录
+        // 我们需要找到 return_date 为 NULL 的最新记录
         const record = await env.DB.prepare(
             'SELECT id FROM BorrowRecords WHERE book_id = ? AND return_date IS NULL'
         ).bind(bookId).first();
 
         if (!record) {
-            // Inconsistent state? Reset book status anyway?
-            // Safety: just reset book status
+            // 状态不一致？无论如何都重置书籍状态？
+            // 安全起见：直接重置书籍状态
             await env.DB.prepare('UPDATE Books SET status = ? WHERE id = ?').bind('available', bookId).run();
             return jsonResponse({ success: true, message: 'Book marked available (No active record found)' });
         }

@@ -10,13 +10,13 @@ export async function onRequestPost(context) {
             return new Response(JSON.stringify({ error: 'Missing username or password' }), { status: 400 });
         }
 
-        // Check availability
+        // 检查用户名是否可用
         const existing = await env.DB.prepare('SELECT id FROM Users WHERE username = ?').bind(username).first();
         if (existing) {
             return new Response(JSON.stringify({ error: 'Username already taken' }), { status: 409 });
         }
 
-        // Insert user (default role: reader)
+        // 插入用户（默认角色：读者）
         const result = await env.DB.prepare('INSERT INTO Users (username, password, role) VALUES (?, ?, ?)')
             .bind(username, password, 'reader')
             .run();
@@ -25,9 +25,9 @@ export async function onRequestPost(context) {
             throw new Error('Failed to create user');
         }
 
-        // Auto-login
-        // We need to fetch the ID we just inserted. SQLite autoincrement ID is in result.meta.last_row_id usually, but D1 response structure varies.
-        // Safest is to query it back or allow login required. Let's query back.
+        // 自动登录
+        // 我们需要获取刚插入的用户 ID。SQLite 的自增 ID 通常在 result.meta.last_row_id 中，但 D1 的响应结构会有所不同。
+        // 最安全的方法是反查数据库，或者要求用户重新登录。这里选择反查。
         const user = await env.DB.prepare('SELECT * FROM Users WHERE username = ?').bind(username).first();
 
         const secret = new TextEncoder().encode(env.JWT_SECRET || 'secret-salt-dev');

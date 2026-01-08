@@ -12,19 +12,19 @@ export async function onRequestPost(context) {
     try {
         const { bookId, userId } = await request.json();
 
-        // If user is reader, can only borrow for self
+        // 如果用户是读者，只能为自己借阅
         let targetUserId = user.sub;
         if (user.role === 'admin' || user.role === 'staff') {
-            if (userId) targetUserId = userId; // Allow borrowing for others
+            if (userId) targetUserId = userId; // 允许为他人借阅
         }
 
-        // Check book availability
+        // 检查书籍可用性
         const book = await env.DB.prepare('SELECT status FROM Books WHERE id = ?').bind(bookId).first();
         if (!book) return errorResponse('Book not found', 404);
         if (book.status !== 'available') return errorResponse('Book is not available', 400);
 
-        // Transaction: Update Book, Insert Record
-        // D1 batching
+        // 事务处理：更新书籍状态，插入借阅记录
+        // D1 批量操作 (batching)
         const now = Math.floor(Date.now() / 1000);
 
         const batch = [
