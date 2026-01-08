@@ -2,19 +2,29 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --primary: #0f172a;
-  --primary-light: #1e293b;
-  --accent: #f59e0b;
-  --accent-hover: #d97706;
-  --bg-body: #f8fafc;
+  /* Midnight Blue Palette */
+  --primary: #0f172a;       /* Slate 900 */
+  --primary-light: #1e293b; /* Slate 800 */
+  --primary-lighter: #334155; /* Slate 700 */
+  
+  --accent: #3b82f6;        /* Blue 500 */
+  --accent-hover: #2563eb;  /* Blue 600 */
+  --accent-light: #eff6ff;  /* Blue 50 */
+  
+  --bg-body: #f8fafc;       /* Slate 50 */
   --bg-surface: #ffffff;
+  
   --text-main: #0f172a;
-  --text-muted: #64748b;
-  --border: #e2e8f0;
-  --radius: 0.75rem;
+  --text-muted: #64748b;    /* Slate 500 */
+  
+  --border: #e2e8f0;        /* Slate 200 */
+  --radius: 0.5rem;
+  
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 10px 10px -5px rgb(0 0 0 / 0.04);
+  
   --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -25,10 +35,10 @@
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   background-color: var(--bg-body);
   color: var(--text-main);
-  line-height: 1.5;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -41,6 +51,7 @@ button {
   cursor: pointer;
   border: none;
   font-family: inherit;
+  background: none;
 }
 
 /* Utilities */
@@ -54,27 +65,31 @@ button {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.625rem 1.25rem;
+  padding: 0.5rem 1rem;
   border-radius: var(--radius);
   font-weight: 500;
   font-size: 0.875rem;
   transition: var(--transition);
+  white-space: nowrap;
 }
 
 .btn-primary {
   background-color: var(--primary);
   color: white;
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.1);
 }
 
 .btn-primary:hover {
   background-color: var(--primary-light);
   transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(15, 23, 42, 0.2);
 }
 
 .btn-secondary {
   background-color: white;
   border: 1px solid var(--border);
   color: var(--text-main);
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-secondary:hover {
@@ -82,18 +97,9 @@ button {
   border-color: var(--text-muted);
 }
 
-.btn-accent {
-  background-color: var(--accent);
-  color: white;
-}
-
-.btn-accent:hover {
-  background-color: var(--accent-hover);
-}
-
 .card {
   background: var(--bg-surface);
-  border-radius: var(--radius);
+  border-radius: 0.75rem;
   border: 1px solid var(--border);
   box-shadow: var(--shadow-sm);
   padding: 1.5rem;
@@ -103,6 +109,7 @@ button {
 .card:hover {
   box-shadow: var(--shadow-md);
   border-color: #cbd5e1;
+  transform: translateY(-2px);
 }
 
 .input {
@@ -113,12 +120,13 @@ button {
   background-color: white;
   transition: var(--transition);
   font-size: 0.875rem;
+  color: var(--text-main);
 }
 
 .input:focus {
   outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.1);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .heading {
@@ -142,3 +150,19 @@ button {
 /* Animations */
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 .animate-fadeIn { animation: fadeIn 0.4s ease-out forwards; }
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

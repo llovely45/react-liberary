@@ -1,5 +1,6 @@
 
 import { SignJWT } from 'jose';
+import { verifyPassword } from '../../utils';
 
 export async function onRequestPost(context) {
   const { request, env } = context;
@@ -50,10 +51,27 @@ export async function onRequestPost(context) {
       });
     }
 
+
     // 2. Standard DB Login
-    const user = await env.DB.prepare('SELECT * FROM Users WHERE username = ? AND password = ?').bind(username, password).first();
+    const user = await env.DB.prepare('SELECT * FROM Users WHERE username = ?').bind(username).first();
 
     if (!user) {
+      return new Response(JSON.stringify({ error: 'Invalid credentials' }), { status: 401 });
+    }
+
+    // Verify Password (Hashed or Plaintext fallback)
+    let isValid = false;
+
+    // 1. Try Hash
+    if (await verifyPassword(password, user.password)) {
+      isValid = true;
+    }
+    // 2. Fallback: Plaintext (for legacy/seed users) - REMOVE IN PRODUCTION
+    else if (user.password === password) {
+      isValid = true;
+    }
+
+    if (!isValid) {
       return new Response(JSON.stringify({ error: 'Invalid credentials' }), { status: 401 });
     }
 
