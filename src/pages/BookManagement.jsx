@@ -1,8 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { ArrowLeft, Save } from 'lucide-react';
+import { ArrowLeft, Save, Book, Calendar, User, Building, FileText } from 'lucide-react';
 
 const BookManagement = ({ isEdit }) => {
     const { id } = useParams();
@@ -69,66 +68,140 @@ const BookManagement = ({ isEdit }) => {
     };
 
     return (
-        <div className="max-w-2xl mx-auto">
-            <button onClick={() => navigate('/books')} className="btn btn-secondary mb-6 text-sm">
-                <ArrowLeft size={16} /> 返回目录
+        <div className="max-w-3xl mx-auto space-y-6">
+            <button onClick={() => navigate('/books')} className="flex items-center text-slate-500 hover:text-slate-800 transition-colors mb-4 text-sm font-medium">
+                <ArrowLeft size={16} className="mr-1" /> 返回图书目录
             </button>
 
-            <div className="card">
-                <h1 className="text-2xl font-bold text-primary mb-6">{isEdit ? '编辑图书' : '添加新书'}</h1>
+            <div className="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden">
+                <div className="bg-slate-50 border-b border-slate-100 px-8 py-6">
+                    <h1 className="text-2xl font-bold text-slate-800">{isEdit ? '编辑图书信息' : '录入新书'}</h1>
+                    <p className="text-slate-500 text-sm mt-1">请填写以下详细信息以完善馆藏记录</p>
+                </div>
 
-                {error && <div className="p-3 mb-4 bg-red-100 text-red-700 rounded-md text-sm">{error}</div>}
+                <div className="p-8">
+                    {error && <div className="p-4 mb-6 bg-red-50 text-red-600 rounded-xl border border-red-100 text-sm flex items-center gap-2">⚠️ {error}</div>}
 
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-sm font-medium mb-1">ISBN</label>
-                            <input name="isbn" value={formData.isbn} onChange={handleChange} className="input" required disabled={isEdit} />
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-1">
+                                <label className="text-sm font-semibold text-slate-700 flex items-center gap-1.5">
+                                    <Book size={14} className="text-slate-400" /> ISBN 编号
+                                </label>
+                                <input
+                                    name="isbn"
+                                    value={formData.isbn}
+                                    onChange={handleChange}
+                                    className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all disabled:bg-slate-50 disabled:text-slate-500"
+                                    required
+                                    disabled={isEdit}
+                                    placeholder="e.g. 978-7-115-54608-1"
+                                />
+                            </div>
+                            <div className="space-y-1">
+                                <label className="text-sm font-semibold text-slate-700 flex items-center gap-1.5">
+                                    <Book size={14} className="text-slate-400" /> 书名
+                                </label>
+                                <input
+                                    name="title"
+                                    value={formData.title}
+                                    onChange={handleChange}
+                                    className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                                    required
+                                    placeholder="输入图书完整名称"
+                                />
+                            </div>
                         </div>
-                        <div>
-                            <label className="block text-sm font-medium mb-1">书名</label>
-                            <input name="title" value={formData.title} onChange={handleChange} className="input" required />
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-1">
+                                <label className="text-sm font-semibold text-slate-700 flex items-center gap-1.5">
+                                    <User size={14} className="text-slate-400" /> 作者
+                                </label>
+                                <input
+                                    name="author"
+                                    value={formData.author}
+                                    onChange={handleChange}
+                                    className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                                    required
+                                    placeholder="图书作者"
+                                />
+                            </div>
+                            <div className="space-y-1">
+                                <label className="text-sm font-semibold text-slate-700 flex items-center gap-1.5">
+                                    <Building size={14} className="text-slate-400" /> 出版社
+                                </label>
+                                <input
+                                    name="publisher"
+                                    value={formData.publisher}
+                                    onChange={handleChange}
+                                    className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                                    placeholder="出版发行社"
+                                />
+                            </div>
                         </div>
-                    </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm font-medium mb-1">作者</label>
-                            <input name="author" value={formData.author} onChange={handleChange} className="input" required />
+                            <label className="text-sm font-semibold text-slate-700 block mb-1 flex items-center gap-1.5">
+                                <Calendar size={14} className="text-slate-400" /> 出版日期
+                            </label>
+                            <input
+                                type="date"
+                                name="publication_date"
+                                value={formData.publication_date}
+                                onChange={handleChange}
+                                className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+                            />
                         </div>
+
                         <div>
-                            <label className="block text-sm font-medium mb-1">出版社</label>
-                            <input name="publisher" value={formData.publisher} onChange={handleChange} className="input" />
+                            <label className="text-sm font-semibold text-slate-700 block mb-1 flex items-center gap-1.5">
+                                <FileText size={14} className="text-slate-400" /> 内容简介
+                            </label>
+                            <textarea
+                                name="description"
+                                value={formData.description}
+                                onChange={handleChange}
+                                className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all h-32 resize-none"
+                                placeholder="简要描述图书内容..."
+                            />
                         </div>
-                    </div>
 
-                    <div>
-                        <label className="block text-sm font-medium mb-1">出版日期</label>
-                        <input type="date" name="publication_date" value={formData.publication_date} onChange={handleChange} className="input" />
-                    </div>
+                        {isEdit && (
+                            <div className="p-4 bg-orange-50 rounded-xl border border-orange-100">
+                                <label className="text-sm font-semibold text-orange-800 block mb-2">当前借阅状态</label>
+                                <select
+                                    name="status"
+                                    value={formData.status}
+                                    onChange={handleChange}
+                                    className="w-full px-4 py-2.5 bg-white border border-orange-200 rounded-xl focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 outline-none transition-all text-orange-900"
+                                >
+                                    <option value="available">现货可借 (Available)</option>
+                                    <option value="borrowed">已借出 (Borrowed)</option>
+                                    <option value="lost">遗失 (Lost)</option>
+                                </select>
+                            </div>
+                        )}
 
-                    <div>
-                        <label className="block text-sm font-medium mb-1">简介</label>
-                        <textarea name="description" value={formData.description} onChange={handleChange} className="input h-32" />
-                    </div>
-
-                    {isEdit && (
-                        <div>
-                            <label className="block text-sm font-medium mb-1">状态</label>
-                            <select name="status" value={formData.status} onChange={handleChange} className="input">
-                                <option value="available">可借阅</option>
-                                <option value="borrowed">已借出</option>
-                                <option value="lost">遗失</option>
-                            </select>
+                        <div className="pt-6 border-t border-slate-100 flex items-center justify-end gap-3">
+                            <button
+                                type="button"
+                                onClick={() => navigate('/books')}
+                                className="px-6 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-medium hover:bg-slate-50 transition-colors"
+                            >
+                                取消
+                            </button>
+                            <button
+                                type="submit"
+                                className="px-6 py-2.5 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 shadow-lg shadow-blue-500/30 transition-all transform active:scale-95 flex items-center gap-2"
+                                disabled={loading}
+                            >
+                                <Save size={18} />
+                                {loading ? '正在保存...' : '保存更改'}
+                            </button>
                         </div>
-                    )}
-
-                    <div className="pt-4">
-                        <button type="submit" className="btn btn-primary w-full justify-center" disabled={loading}>
-                            <Save size={18} /> {loading ? '保存中...' : '保存'}
-                        </button>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     );

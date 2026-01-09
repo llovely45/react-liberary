@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Shield, Plus, X } from 'lucide-react';
+import { Shield, Plus, X, User, Calendar, MoreHorizontal } from 'lucide-react';
 
 const UserManagement = () => {
     const { user: currentUser } = useAuth();
@@ -40,7 +39,6 @@ const UserManagement = () => {
                 body: JSON.stringify({ role: newRole })
             });
             if (res.ok) {
-                alert('角色已更新');
                 fetchUsers();
             } else {
                 alert('更新角色失败');
@@ -63,7 +61,6 @@ const UserManagement = () => {
             });
             const data = await res.json();
             if (res.ok) {
-                alert('用户创建成功');
                 setShowAddModal(false);
                 setNewUser({ username: '', password: '', role: 'reader' });
                 fetchUsers();
@@ -76,111 +73,156 @@ const UserManagement = () => {
     };
 
     return (
-        <div>
-            <div className="flex-between mb-6">
-                <h1 className="text-3xl font-bold text-primary">用户管理</h1>
-                <button onClick={() => setShowAddModal(true)} className="btn btn-primary">
-                    <Plus size={18} /> 添加用户
+        <div className="space-y-6">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-3xl font-bold text-slate-800 tracking-tight">用户管理</h1>
+                    <p className="text-slate-500 text-sm mt-1">管理系统注册用户及权限分配</p>
+                </div>
+                <button
+                    onClick={() => setShowAddModal(true)}
+                    className="btn btn-primary shadow-lg shadow-purple-500/30 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700"
+                >
+                    <Plus size={18} />
+                    <span>添加用户</span>
                 </button>
             </div>
 
-            <div className="card overflow-hidden p-0">
-                <table className="w-full text-left border-collapse">
-                    <thead className="bg-[#f0f4f8] border-b border-border">
-                        <tr>
-                            <th className="p-4 text-sm font-semibold text-muted">ID</th>
-                            <th className="p-4 text-sm font-semibold text-muted">用户名</th>
-                            <th className="p-4 text-sm font-semibold text-muted">角色</th>
-                            <th className="p-4 text-sm font-semibold text-muted">创建时间</th>
-                            <th className="p-4 text-sm font-semibold text-muted text-right">操作</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-border">
-                        {users.map(u => (
-                            <tr key={u.id} className="hover:bg-gray-50 transition-colors">
-                                <td className="p-4 text-sm text-main">{u.id}</td>
-                                <td className="p-4 text-sm font-medium text-primary">{u.username}</td>
-                                <td className="p-4">
-                                    <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold 
-                                    ${u.role === 'admin' ? 'bg-purple-100 text-purple-700' :
-                                            u.role === 'staff' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'}`}>
-                                        <Shield size={10} />
-                                        {u.role.toUpperCase()}
-                                    </span>
-                                </td>
-                                <td className="p-4 text-sm text-muted">
-                                    {new Date(u.created_at * 1000).toLocaleDateString()}
-                                </td>
-                                <td className="p-4 text-right">
-                                    {currentUser.role === 'admin' && u.username !== 'admin' && ( // Simple protect admin
-                                        <select
-                                            className="text-sm border rounded px-2 py-1 bg-white"
-                                            value={u.role}
-                                            onChange={(e) => handleRoleChange(u.id, e.target.value)}
-                                        >
-                                            <option value="reader">Reader</option>
-                                            <option value="staff">Staff</option>
-                                            <option value="admin">Admin</option>
-                                        </select>
-                                    )}
-                                </td>
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse">
+                        <thead>
+                            <tr className="bg-slate-50/50 border-b border-slate-200">
+                                <th className="p-5 text-xs font-bold text-slate-400 uppercase tracking-wider">ID</th>
+                                <th className="p-5 text-xs font-bold text-slate-400 uppercase tracking-wider">用户信息</th>
+                                <th className="p-5 text-xs font-bold text-slate-400 uppercase tracking-wider">角色权限</th>
+                                <th className="p-5 text-xs font-bold text-slate-400 uppercase tracking-wider">加入时间</th>
+                                <th className="p-5 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">操作</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100">
+                            {users.map((u, index) => (
+                                <tr key={u.id} className="hover:bg-slate-50/80 transition-colors animate-fadeIn" style={{ animationDelay: `${index * 50}ms` }}>
+                                    <td className="p-5 text-sm font-mono text-slate-400">#{u.id}</td>
+                                    <td className="p-5">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-slate-200 to-slate-300 flex items-center justify-center text-xs font-bold text-slate-600">
+                                                {u.username.charAt(0).toUpperCase()}
+                                            </div>
+                                            <span className="font-medium text-slate-900">{u.username}</span>
+                                        </div>
+                                    </td>
+                                    <td className="p-5">
+                                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold shadow-sm border
+                                        ${u.role === 'admin' ? 'bg-purple-100/50 text-purple-700 border-purple-200' :
+                                                u.role === 'staff' ? 'bg-blue-100/50 text-blue-700 border-blue-200' : 'bg-slate-100/50 text-slate-700 border-slate-200'}`}>
+                                            <Shield size={12} />
+                                            <span className="capitalize">{u.role}</span>
+                                        </span>
+                                    </td>
+                                    <td className="p-5">
+                                        <div className="flex items-center gap-2 text-sm text-slate-500">
+                                            <Calendar size={14} />
+                                            {new Date(u.created_at * 1000).toLocaleDateString()}
+                                        </div>
+                                    </td>
+                                    <td className="p-5 text-right">
+                                        {currentUser.role === 'admin' && u.username !== 'admin' && (
+                                            <div className="relative inline-block">
+                                                <select
+                                                    className="appearance-none bg-white border border-slate-200 text-slate-700 text-sm rounded-lg pl-3 pr-8 py-1.5 focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-shadow cursor-pointer hover:border-purple-400"
+                                                    value={u.role}
+                                                    onChange={(e) => handleRoleChange(u.id, e.target.value)}
+                                                >
+                                                    <option value="reader">Reader</option>
+                                                    <option value="staff">Staff</option>
+                                                    <option value="admin">Admin</option>
+                                                </select>
+                                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
+                                                    <MoreHorizontal size={14} />
+                                                </div>
+                                            </div>
+                                        )}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             {/* Add User Modal */}
             {showAddModal && (
-                <div className="fixed inset-0 bg-black/50 flex-center z-50 animate-fadeIn">
-                    <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-2xl">
-                        <div className="flex-between mb-4">
-                            <h3 className="text-xl font-bold text-primary">添加新用户</h3>
-                            <button onClick={() => setShowAddModal(false)} className="text-muted hover:text-red-500">
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                    <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onClick={() => setShowAddModal(false)} />
+
+                    <div className="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl relative z-10 animate-fadeIn">
+                        <div className="flex items-center justify-between mb-8">
+                            <div>
+                                <h3 className="text-xl font-bold text-slate-900">添加新用户</h3>
+                                <p className="text-slate-500 text-sm mt-1">创建一个新的系统访问账号</p>
+                            </div>
+                            <button onClick={() => setShowAddModal(false)} className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors">
                                 <X size={20} />
                             </button>
                         </div>
-                        <form onSubmit={handleAddUser} className="space-y-4">
-                            <div>
-                                <label className="block text-sm font-medium mb-1">用户名</label>
-                                <input
-                                    type="text"
-                                    className="input"
-                                    value={newUser.username}
-                                    onChange={e => setNewUser({ ...newUser, username: e.target.value })}
-                                    required
-                                />
+
+                        <form onSubmit={handleAddUser} className="space-y-5">
+                            <div className="space-y-1">
+                                <label className="text-sm font-semibold text-slate-700 block">用户名</label>
+                                <div className="relative">
+                                    <User className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                                    <input
+                                        type="text"
+                                        className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 outline-none transition-all"
+                                        placeholder="输入用户名"
+                                        value={newUser.username}
+                                        onChange={e => setNewUser({ ...newUser, username: e.target.value })}
+                                        required
+                                    />
+                                </div>
                             </div>
-                            <div>
-                                <label className="block text-sm font-medium mb-1">密码</label>
+
+                            <div className="space-y-1">
+                                <label className="text-sm font-semibold text-slate-700 block">密码</label>
                                 <input
                                     type="text"
-                                    className="input"
+                                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 outline-none transition-all"
                                     value={newUser.password}
                                     onChange={e => setNewUser({ ...newUser, password: e.target.value })}
                                     required
-                                    placeholder="明文密码 (将会被加密存储)"
+                                    placeholder="设置初始密码"
                                 />
+                                <p className="text-xs text-slate-400">密码将会被安全加密存储。</p>
                             </div>
-                            <div>
-                                <label className="block text-sm font-medium mb-1">角色</label>
+
+                            <div className="space-y-1">
+                                <label className="text-sm font-semibold text-slate-700 block">角色权限</label>
                                 <select
-                                    className="input"
+                                    className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 outline-none transition-all appearance-none"
                                     value={newUser.role}
                                     onChange={e => setNewUser({ ...newUser, role: e.target.value })}
                                 >
-                                    <option value="reader">读者 (Reader)</option>
+                                    <option value="reader">读者 (Reader) - 仅借阅</option>
                                     {currentUser.role === 'admin' && (
-                                        <option value="staff">工作人员 (Staff)</option>
+                                        <option value="staff">工作人员 (Staff) - 图书管理</option>
                                     )}
                                 </select>
                             </div>
-                            <div className="pt-2 flex justify-end gap-2">
-                                <button type="button" onClick={() => setShowAddModal(false)} className="btn btn-secondary">
+
+                            <div className="pt-4 flex gap-3">
+                                <button
+                                    type="button"
+                                    onClick={() => setShowAddModal(false)}
+                                    className="flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-medium hover:bg-slate-50 transition-colors"
+                                >
                                     取消
                                 </button>
-                                <button type="submit" className="btn btn-primary">
-                                    创建用户
+                                <button
+                                    type="submit"
+                                    className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-medium hover:from-purple-700 hover:to-indigo-700 shadow-lg shadow-purple-500/25 transition-all transform active:scale-95"
+                                >
+                                    确认创建
                                 </button>
                             </div>
                         </form>
