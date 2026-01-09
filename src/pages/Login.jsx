@@ -126,11 +126,12 @@ const Login = () => {
                         </button>
                     </div>
                 </div>
-
-                <p className="text-center text-slate-600 text-xs mt-8 tracking-widest uppercase">
-                    &copy; {new Date().getFullYear()} Liberary Management System
-                </p>
             </div>
+
+            {/* 版权信息 - 页面底部居中 */}
+            <p className="absolute bottom-6 left-0 w-full text-center text-slate-500 text-xs tracking-widest uppercase z-20">
+                &copy; {new Date().getFullYear()} Liberary Management System
+            </p>
         </div>
     );
 };
